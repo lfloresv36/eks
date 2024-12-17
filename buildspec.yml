@@ -1,5 +1,4 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
@@ -11,19 +10,16 @@ phases:
       - terraform --version
       - helm version
       - aws eks --version
-
   pre_build:
     commands:
-   	- echo "Iniciando Terraform"
-	- terraform init
-	- terraform apply -auto-approve
-	- export VPC_ID=$(terraform output -raw vpc_id)
-	- echo "VPC_ID=${VPC_ID}"
-  
-post_build:
+      - echo "Iniciando Terraform"
+      - terraform init
+      - terraform apply -auto-approve
+      - export VPC_ID=$(terraform output -raw vpc_id)
+      - echo "VPC_ID=${VPC_ID}"
+  post_build:
     commands:
       - echo "Ejecución completada. VPC_ID=${VPC_ID}"
-
   build:
     commands:
       - echo "Configurando kubectl para EKS"
@@ -35,14 +31,12 @@ post_build:
           --set clusterName=eks-rdg \
           --set awsRegion=us-east-1 \
           --set awsVpcID=$VPC_ID \
-          --namespace kube-system
-
-  post_build:
+          --namespace kube-system          
+post_build:
     commands:
       - echo "Desplegando aplicación"
       - kubectl apply -f app-deployment.yaml
       - echo "Despliegue completado"
-
 artifacts:
   files:
     - '**/*'
