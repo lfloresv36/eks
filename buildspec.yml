@@ -14,12 +14,15 @@ phases:
 
   pre_build:
     commands:
-      - echo "Inicializando Terraform"
-      - cd terraform  # Asegúrate de cambiar a tu directorio Terraform
-      - terraform init
-      - terraform apply -auto-approve
-      - export VPC_ID=$(terraform output -raw vpc_id)
-      - echo "VPC_ID obtenido: $VPC_ID"
+   	- echo "Iniciando Terraform"
+	- terraform init
+	- terraform apply -auto-approve
+	- export VPC_ID=$(terraform output -raw vpc_id)
+	- echo "VPC_ID=${VPC_ID}"
+  
+post_build:
+    commands:
+      - echo "Ejecución completada. VPC_ID=${VPC_ID}"
 
   build:
     commands:
