@@ -34,14 +34,6 @@ module "vpc" {
   manage_default_security_group = true
   default_security_group_tags   = { Name = "${var.cluster_name}-default" }
 
-
-
-  output "vpc_id" {
-    description = "The VPC ID of the created VPC"
-    value       = module.vpc.vpc_id
-  }
-
-
   public_subnet_tags = merge(local.tags, {
     "kubernetes.io/role/elb" = "1"
   })
@@ -51,4 +43,10 @@ module "vpc" {
   })
 
   tags = local.tags
+}
+
+# Declarar el output fuera del módulo
+output "vpc_id" {
+  description = "The VPC ID of the created VPC"
+  value       = module.vpc.vpc_id
 }
