@@ -2,7 +2,7 @@
 variable "cluster_name" {
   description = "Name of the EKS cluster"
   type        = string
-  default     = "eks-rdg-01"
+  default     = "eks-rdg-alb"
 }
 
 variable "cluster_version" {
