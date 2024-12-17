@@ -1,0 +1,12 @@
+{
+  "Effect": "Allow",
+  "Action": [
+    "ec2:*",
+    "eks:*",
+    "elasticloadbalancing:*",
+    "iam:*",
+    "s3:*",
+    "dynamodb:*"
+  ],
+  "Resource": "*"
+}

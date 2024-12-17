@@ -1,0 +1,4 @@
+git init
+git add .
+git commit -m "Initial commit for EKS with VPC and ALB"
+git push origin main

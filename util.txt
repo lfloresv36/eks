@@ -1,0 +1,3 @@
+aws eks --region us-east-1 update-kubeconfig --name eks-rdg
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller   --namespace kube-system   --set clusterName=eks-rdg   --set serviceAccount.create=false   --set serviceAccount.name=aws-load-balancer-controller
+kubectl get svc --all-namespaces -o wide
