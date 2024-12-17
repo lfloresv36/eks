@@ -2,21 +2,44 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      python: 3.x
     commands:
-      - echo "Instalando Terraform y dependencias..."
-      - curl -L -o terraform.zip https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_linux_amd64.zip
-      - unzip terraform.zip
-      - mv terraform /usr/local/bin/
+      - echo "Instalando dependencias necesarias"
+      - pip install --upgrade awscli
+      - curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+      - terraform --version
+      - helm version
+      - aws eks --version
+
   pre_build:
     commands:
-      - echo "Inicializando Terraform..."
-      - terraform init -input=false
+      - echo "Inicializando Terraform"
+      - cd terraform  # Asegúrate de cambiar a tu directorio Terraform
+      - terraform init
+      - terraform apply -auto-approve
+      - export VPC_ID=$(terraform output -raw vpc_id)
+      - echo "VPC_ID obtenido: $VPC_ID"
+
   build:
     commands:
-      - echo "Planeando y aplicando Terraform..."
-      - terraform plan -input=false
-      - terraform apply -auto-approve
+      - echo "Configurando kubectl para EKS"
+      - aws eks update-kubeconfig --region us-east-1 --name eks-rdg
+      - echo "Instalando AWS Load Balancer Controller"
+      - helm repo add eks https://aws.github.io/eks-charts
+      - helm repo update
+      - helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+          --set clusterName=eks-rdg \
+          --set awsRegion=us-east-1 \
+          --set awsVpcID=$VPC_ID \
+          --namespace kube-system
+
+  post_build:
+    commands:
+      - echo "Desplegando aplicación"
+      - kubectl apply -f app-deployment.yaml
+      - echo "Despliegue completado"
+
 artifacts:
   files:
-    - "**/*"
-  discard-paths: yes
+    - '**/*'
