@@ -2,7 +2,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.x
+      python: 3.12
     commands:
       - echo "Instalando dependencias necesarias"
       - pip install --upgrade awscli
@@ -17,8 +17,8 @@ phases:
       - terraform apply -auto-approve
       - export VPC_ID=$(terraform output -raw vpc_id)
       - echo "VPC_ID=${VPC_ID}"
-  post_build:
-    commands:
+    post_build:
+      commands:
       - echo "Ejecución completada. VPC_ID=${VPC_ID}"
   build:
     commands:
@@ -32,11 +32,11 @@ phases:
           --set awsRegion=us-east-1 \
           --set awsVpcID=$VPC_ID \
           --namespace kube-system          
-post_build:
-    commands:
-      - echo "Desplegando aplicación"
-      - kubectl apply -f app-deployment.yaml
-      - echo "Despliegue completado"
+    post_build:
+      commands:
+        - echo "Desplegando aplicación"
+        - kubectl apply -f app-deployment.yaml
+        - echo "Despliegue completado"
 artifacts:
   files:
     - '**/*'
