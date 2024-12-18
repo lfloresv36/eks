@@ -51,7 +51,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80,"HTTPS":443}]'
-    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:us-east-1:123456789012:certificate/abcde12345-6789-0123-4567-abcdef123456"
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:us-east-1:515966518121:certificate/7571f17a-71fb-4a62-963e-0dd0afece781"
 spec:
   rules:
   - host: app-ambrosia.cloudaws.cl
