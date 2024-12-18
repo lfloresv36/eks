@@ -17,7 +17,7 @@ phases:
     commands:
       - echo "Iniciando Terraform"
       - terraform init
-      - terraform apply -auto-approve || { echo "Terraform falló, ejecutando terraform destroy"; terraform destroy -auto-approve; exit 1; }
+      - terraform apply
       - terraform output -raw cluster_name > cluster_name.txt
       - export CLUSTER_NAME=$(cat cluster_name.txt)
       - echo "Cluster Name=$CLUSTER_NAME"
@@ -26,11 +26,11 @@ phases:
   build:
     commands:
       - echo "Configurando kubectl para EKS"
-      - aws eks update-kubeconfig --region us-east-1 --name $CLUSTER_NAME || { echo "Error al configurar kubectl, ejecutando terraform destroy"; terraform destroy -auto-approve; exit 1; }
+      - aws eks update-kubeconfig --region us-east-1 --name $CLUSTER_NAME
       - echo "Instalando AWS Load Balancer Controller"
       - helm repo add eks https://aws.github.io/eks-charts
       - helm repo update
-      - helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set clusterName=$CLUSTER_NAME --set awsRegion=us-east-1 --set awsVpcID=$VPC_ID --namespace kube-system || { echo "Error en Helm, ejecutando terraform destroy"; terraform destroy -auto-approve; exit 1; }
+      - helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set clusterName=$CLUSTER_NAME --set awsRegion=us-east-1 --set awsVpcID=$VPC_ID --namespace kube-system
   post_build:
     commands:
       - echo "Desplegando aplicación"
