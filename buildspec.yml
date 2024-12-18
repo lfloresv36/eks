@@ -20,7 +20,7 @@ phases:
       - terraform apply -auto-approve
       - terraform output -raw cluster_name > cluster_name.txt
       - export CLUSTER_NAME=$(cat cluster_name.txt)
-      - echo "Cluster Name $CLUSTER_NAME"
+      - echo "Cluster Name=$CLUSTER_NAME"
       - export VPC_ID=$(terraform output -raw vpc_id)
       - echo "VPC_ID=${VPC_ID}"
   build:
@@ -33,10 +33,13 @@ phases:
       - helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set clusterName=$CLUSTER_NAME --set awsRegion=us-east-1 --set awsVpcID=$VPC_ID --namespace kube-system
   post_build:
     commands:
-      - echo "Desplegando aplicación"
-      - kubectl apply -f app-deployment.yaml
-      - echo "Despliegue completado"
-      - echo "Ejecución completada. VPC_ID=${VPC_ID}"
+      - echo "Validando el estado de ejecución"
+      - if [ $? -ne 0 ]; then
+          echo "Falló el despliegue. Ejecutando terraform destroy...";
+          terraform destroy -auto-approve;
+        else
+          echo "Despliegue exitoso. Finalizando.";
+        fi
 artifacts:
   files:
     - '**/*'
