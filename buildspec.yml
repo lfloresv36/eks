@@ -15,20 +15,20 @@ phases:
       - aws eks --version
 pre_build:
     commands:
-        - echo "Preparando Terraform para aplicar cambios"
-        - terraform init
-        - echo "Aplicando cambios de Terraform"
-        - terraform apply -auto-approve
+      - echo "Preparando Terraform para aplicar cambios"
+      - terraform init
+      - echo "Aplicando cambios de Terraform"
+      - terraform apply -auto-approve
 build:
     commands:        
-        - echo "Cambios aplicados exitosamente."
-        - terraform output -raw cluster_name > cluster_name.txt
-        - export CLUSTER_NAME=$(cat cluster_name.txt)
-        - echo "Cluster Name=$CLUSTER_NAME"
-        - export VPC_ID=$(terraform output -raw vpc_id)
-        - echo "VPC_ID=${VPC_ID}"
+      - echo "Cambios aplicados exitosamente."
+      - terraform output -raw cluster_name > cluster_name.txt
+      - export CLUSTER_NAME=$(cat cluster_name.txt)
+      - echo "Cluster Name=$CLUSTER_NAME"
+      - export VPC_ID=$(terraform output -raw vpc_id)
+      - echo "VPC_ID=${VPC_ID}"
 post_build:
-  commands:
+    commands:
       - echo "Configurando kubectl para EKS"
       - aws eks update-kubeconfig --region us-east-1 --name $CLUSTER_NAME
       - echo "Instalando AWS Load Balancer Controller"
