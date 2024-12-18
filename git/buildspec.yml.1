@@ -4,7 +4,6 @@ phases:
     runtime-versions:
       python: 3.12
     commands:
-      - set -e
       - echo "Instalando dependencias necesarias"
       - curl -L -o terraform.zip https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_linux_amd64.zip
       - unzip terraform.zip
@@ -16,7 +15,6 @@ phases:
       - aws eks --version
   pre_build:
     commands:
-      - set -e
       - echo "Iniciando Terraform"
       - terraform init
       - terraform apply -auto-approve
@@ -27,20 +25,18 @@ phases:
       - echo "VPC_ID=${VPC_ID}"
   build:
     commands:
-      - set -e
       - echo "Configurando kubectl para EKS"
       - aws eks update-kubeconfig --region us-east-1 --name $CLUSTER_NAME
       - echo "Instalando AWS Load Balancer Controller"
       - helm repo add eks https://aws.github.io/eks-charts
       - helm repo update
       - helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
-          --set clusterName=$CLUSTER_NAME \
+          --set clusterName=CLUSTER_NAME \
           --set awsRegion=us-east-1 \
           --set awsVpcID=$VPC_ID \
           --namespace kube-system
   post_build:
     commands:
-      - set -e
       - echo "Desplegando aplicación"
       - kubectl apply -f app-deployment.yaml
       - echo "Despliegue completado"

@@ -23,5 +23,7 @@ variable "vpc_cidr" {
   default     = "10.111.0.0/16"
 }
 
-
-                             
+output "cluster_name" {
+  value = var.cluster_name
+}
+                            
