@@ -20,7 +20,7 @@ phases:
       - terraform apply -auto-approve
       - terraform output -raw cluster_name > cluster_name.txt
       - export CLUSTER_NAME=$(cat cluster_name.txt)
-      - echo "Cluster Name: $CLUSTER_NAME"
+      - echo "Cluster Name $CLUSTER_NAME"
       - export VPC_ID=$(terraform output -raw vpc_id)
       - echo "VPC_ID=${VPC_ID}"
   build:
