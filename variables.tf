@@ -2,7 +2,7 @@
 variable "cluster_name" {
   description = "Name of the EKS cluster"
   type        = string
-  default     = "eks-rdg-albv2-0704"
+  default     = "eks-rdg-albv2-0741"
 }
 
 variable "cluster_version" {
@@ -20,10 +20,9 @@ variable "ami_release_version" {
 variable "vpc_cidr" {
   description = "Defines the CIDR block used on Amazon VPC created for Amazon EKS."
   type        = string
-  default     = "10.111.0.0/16"
+  default     = "10.222.0.0/16"
 }
 
 output "cluster_name" {
   value = var.cluster_name
 }
-                            

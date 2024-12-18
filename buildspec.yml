@@ -34,8 +34,6 @@ phases:
   post_build:
     commands:
       - echo "Desplegando aplicación"
-      - kubectl apply -f namespace.yaml || { echo "Error en el despliegue, ejecutando terraform destroy"; terraform destroy -auto-approve; exit 1; }
-      - kubectl apply -f app-deployment.yaml || { echo "Error en el despliegue, ejecutando terraform destroy"; terraform destroy -auto-approve; exit 1; }
       - echo "Despliegue completado"
       - echo "Ejecución completada. VPC_ID=${VPC_ID}"
 artifacts:
