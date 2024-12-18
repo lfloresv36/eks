@@ -33,13 +33,15 @@ phases:
       - helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set clusterName=$CLUSTER_NAME --set awsRegion=us-east-1 --set awsVpcID=$VPC_ID --namespace kube-system
   post_build:
     commands:
-      - echo "Validando el estado de ejecución"
-      - if [ $? -ne 0 ]; then
-          echo "Falló el despliegue. Ejecutando terraform destroy...";
-          terraform destroy -auto-approve;
-        else
-          echo "Despliegue exitoso. Finalizando.";
-        fi
+      - echo "Desplegando aplicación"
+      - kubectl apply -f namespace.yaml
+      - kubectl apply -f app-deployment.yaml
+      - echo "Despliegue completado"
+      - echo "Ejecución completada. VPC_ID=${VPC_ID}"
+  on_failure:
+    commands:
+      - echo "Error en el despliegue, ejecutando terraform destroy"
+      - terraform destroy -auto-approve
 artifacts:
   files:
     - '**/*'
