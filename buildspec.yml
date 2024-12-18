@@ -40,7 +40,6 @@ phases:
       - echo "Desplegando aplicación"
       - kubectl apply -f app-deployment.yaml
       - echo "Despliegue completado"
-      - echo "Ejecución completada. VPC_ID=${VPC_ID}"
 artifacts:
   files:
     - '**/*'
