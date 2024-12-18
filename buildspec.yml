@@ -17,12 +17,11 @@ pre_build:
     commands:
         - echo "Preparando Terraform para aplicar cambios"
         - terraform init
-build:
-    commands:
         - echo "Aplicando cambios de Terraform"
-        - terraform apply -auto-approve tfplan
+        - terraform apply -auto-approve
+build:
+    commands:        
         - echo "Cambios aplicados exitosamente."
-
         - terraform output -raw cluster_name > cluster_name.txt
         - export CLUSTER_NAME=$(cat cluster_name.txt)
         - echo "Cluster Name=$CLUSTER_NAME"
