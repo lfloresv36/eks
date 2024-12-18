@@ -1,0 +1,30 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+    commands:
+      - echo "Instalando dependencias necesarias"
+      - curl -L -o terraform.zip https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_linux_amd64.zip
+      - unzip terraform.zip
+      - mv terraform /usr/local/bin/
+      - pip install --upgrade awscli
+      - curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+      - terraform --version
+      - helm version
+      - aws eks --version
+  pre_build:
+    commands:
+      - echo "Iniciando Terraform"
+      - terraform init
+  build:
+    commands:
+      - echo "Generando plan de Terraform"
+      - terraform plan -out=tfplan
+  post_build:
+    commands:
+      - echo "Plan de Terraform generado y listo para revisión."
+artifacts:
+  files:
+    - tfplan
+    - '**/*'
