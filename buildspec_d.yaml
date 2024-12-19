@@ -16,6 +16,8 @@ phases:
   pre_build:
     commands:
       - echo "Iniciando delete"
+      - terraform init
+      - echo "Iniciando delete"
       - terraform destroy -auto-approve
   build:
     commands:
