@@ -15,10 +15,12 @@ phases:
       - aws eks --version
   pre_build:
     commands:
-      - echo "Iniciando delete"
+      - echo "Iniciando del fin.."
       - terraform init
+      - echo "Inicio El Plan"
+      - terraform plan -out=tfplan
       - echo "Iniciando delete"
-      - terraform destroy -auto-approve
+      - terraform destroy -auto-approve -out=tfplan
   build:
     commands:
       - echo "Generando plan de destrucion"

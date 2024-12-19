@@ -17,11 +17,9 @@ phases:
     commands:
       - echo "Preparando Terraform"
       - terraform init
-      - echo "Generando plan de Terraform"
-      -	terraform destroy -auto-approve
-      #- terraform plan -out=tfplan
+      - terraform plan -out=tfplan
       - echo "Aplicando cambios de Terraform"
-      #- terraform apply -auto-approve tfplan
+      - terraform apply -auto-approve tfplan
   build:
     commands:
       - echo "Exportando variables de Terraform"
